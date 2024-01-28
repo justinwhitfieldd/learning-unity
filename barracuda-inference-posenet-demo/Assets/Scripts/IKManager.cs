@@ -9,6 +9,7 @@ public class IKManager : MonoBehaviour
     //end effector
     public ArmJoint m_end;
     public GameObject m_target;
+    public InferenceController inferenceController; // Assign this in the Unity Editor
 
     public float m_rate = 5.0f;
     public int m_steps = 24;
@@ -30,6 +31,14 @@ public class IKManager : MonoBehaviour
     }
     void Update()
     {
+         // Get the 2D position of the right wrist from the InferenceController
+        Vector2 rightWristPosition2D = inferenceController.GetRightWristPosition2D();
+
+        // Convert 2D position to 3D, setting Z position to be the same as the arm's root Z position
+        Vector3 rightWristPosition3D = new Vector3(rightWristPosition2D.x, rightWristPosition2D.y, m_root.transform.position.z);
+
+        // Use rightWristPosition3D as the target position for the IK calculations
+        m_target.transform.position = rightWristPosition3D;
         for(int i=0; i< m_steps; ++i)
         {
             if(GetDistance(m_end.transform.position,m_target.transform.position) > m_threshold)

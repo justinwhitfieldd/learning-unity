@@ -193,7 +193,18 @@ public class InferenceController : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public Vector2 GetRightWristPosition2D()
+    {
+        if (humanPoses != null && humanPoses.Length > 0 && humanPoses[0].bodyParts.Length > 10) // Make sure there's at least one pose and the right wrist index is within range
+        {
+            // Get 2D position of the right wrist (index 10)
+            Vector2 rightWristPos2D = humanPoses[0].bodyParts[10].coordinates;
+            
+            return rightWristPos2D;
+        }
 
+        return Vector2.zero; // Return zero vector if no pose is detected or the right wrist is not in the pose
+    }
     /// <summary>
     /// Update the confidence threshold for object detection.
     /// </summary>
